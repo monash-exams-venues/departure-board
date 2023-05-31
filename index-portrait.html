@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+  		<title>Schedule</title>
+  		<meta name="description" content="Schedule">
+  		<meta name="author" content="Peter Jolly">
+	</head>
+
+	<style>
+		iframe {
+			display: block;
+			background: #fff;
+			border: none;
+			overflow:hidden;
+			overflow-x:hidden;
+			overflow-y:hidden;
+			height:150%;
+			width:150%;
+			position:absolute;
+			top:0px;
+			left:0px;
+			right:0px;
+			bottom:0px
+		}
+	</style>
+
+	<body style="margin:0px;padding:0px;overflow:hidden">
+		<div id="iframe-frame">
+			<iframe 
+				id="google_Sheet_1" 
+				src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9ezcZf7e9t07Of056LcPdKHctsWHQg7Q7aRfZNmNq14q_Hz_7HUSm0A-tpF4crzp55DyhjvFakXbN/pubhtml?gid=1991856509&single=true&widget=false&chrome=false&headers=false" 
+				frameborder="0"
+				style="z-index: 1;"  
+				height="150%" 
+				width="150%">
+			</iframe>
+			<iframe 
+				id="google_Sheet_2" 
+				src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9ezcZf7e9t07Of056LcPdKHctsWHQg7Q7aRfZNmNq14q_Hz_7HUSm0A-tpF4crzp55DyhjvFakXbN/pubhtml?gid=270167756&single=true&amp;widget=true&amp;headers=false" 
+				frameborder="0" 
+				style="z-index: -1;" 
+				height="150%" 
+				width="150%">
+			</iframe>
+		</div>
+	</body>
+
+	<script>
+
+		const API_KEY = "AIzaSyCJYGWWCwZxp6iT3KVy68ASYEDu26vGpG4"
+		const SPREADSHEET_ID = "1UbYZOe9YR-Jch8GmvD4OQu3CJCtm-qXv2UjP6utfqp0"
+		const SHEET_NAME = encodeURIComponent("Portrait 1080p - Page 2")
+		const PAGE_2_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}/?key=${API_KEY}`
+
+		const PAGE_1 = document.getElementById('google_Sheet_1')
+		const PAGE_2 = document.getElementById('google_Sheet_2')
+
+		async function checkPage2() {
+			return await fetch(PAGE_2_URL)
+				.then(response => response.json())
+				.then(data => data.values.length > 6)
+		}
+		
+		setInterval(() => {
+				document.getElementById('google_Sheet_1').src += '';
+				document.getElementById('google_Sheet_2').src += '';
+			}, 120000);
+
+		checkPage2()
+			.then(check => { 
+				if (check) {
+					setInterval(() => {
+						PAGE_1.style.zIndex = -1*parseInt(PAGE_1.style.zIndex);
+						PAGE_2.style.zIndex = -1*parseInt(PAGE_2.style.zIndex);
+						console.log("switch")
+					}, 10000);
+		  		}
+			})
+	</script>
+
+</html>
